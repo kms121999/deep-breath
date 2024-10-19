@@ -32,7 +32,9 @@ def Notification():
     # Launch the window
     win.root.mainloop()
 
-    win.root.
+    # win.root.quit()
+
+# Notification()
 
     
 

@@ -29,8 +29,13 @@ class Tracker():
         self.update_reset(self.monitored_processes)
 
     def check_limit_status(self):
+        """
+        This function checks to see if the monitored processes time use exceeds certain limits.
+        Here is where it is decided on how to handle the user :)
+        """
         for process in self.monitored_processes.items():
-            if process[1]['time'] == process[1]['session_limit']:
+            # If the processes current time is equal to the session limit, 
+            if process[1]['time'] >= process[1]['session_limit']:
                 # Here is where the process is killed
                 os.system(f'taskkill /f /im {process[0]}')
                 self.Notification.display_notification()

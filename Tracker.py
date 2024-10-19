@@ -2,7 +2,7 @@ import psutil
 from datetime import datetime
 import time
 import os
-from notifications.Notification2 import Notification
+from notifications.Notification import Notification
 from setting_management.SettingManager import SettingManager
 
 class Tracker():
@@ -67,10 +67,8 @@ class Tracker():
             self.update_monitored_processes(processes)
             # Check if the user has exceeded their time limit
             self.check_limit_status()
-            self.Notification()
+            self.Notification.display_notification()
 
-            #! For testing purposes only
-            self.running = False
 
 
 tracker = Tracker()

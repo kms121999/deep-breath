@@ -51,14 +51,20 @@ from overlay import Window  # Ensure your `Window` class is properly defined.
 from tkhtmlview import HTMLLabel
 
 def Notification():
-    # Create a new Toplevel window (instead of Tk)
-    win = tk.Toplevel()
-    win.title("Custom Notification")
-    win.configure(bg="lightblue")
-    win.attributes("-alpha", 0.9)  # 90% opacity
+    # Create the window
+    win = Window()
 
-    # HTML content using HTMLLabel
-    my_label = HTMLLabel(win, html=""" 
+    # Change the title of the window
+    win.root.title("Custom Notification")
+
+    # Set the background color of the window (can be any color, it will be transparent later)
+    win.root.configure(bg="lightblue")
+
+    # Make the window transparent
+    win.root.attributes("-alpha", 0.9)  # 0.9 is the transparency level (90% opacity)
+
+    # Create the HTMLLabel with your HTML content
+    my_label = HTMLLabel(win.root, html=""" 
         <h1 style="color: lightblue;">DeepBreath</h1>
     """)
     my_label.pack(pady=10, padx=10)
@@ -67,33 +73,14 @@ def Notification():
     label = tk.Label(win, text="Hey", font=("Arial", 14), bg="lightblue", fg="black")
     label.pack(pady=20, padx=20)
 
-    # Schedule the window to close after 5 seconds
-    win.after(5000, lambda: safe_destroy(win))
+    win.root.after(5000,win.root.destroy)
 
-def safe_destroy(window):
-    try:
-        window.destroy()  # Destroy the Toplevel window
-    except tk.TclError:
-        pass  # Ignore errors if the window is already closed
+    # Launch the window
+    win.root.mainloop()
 
-def schedule_notification(root):
-    # Show the notification
-    Notification()
+    # win.root.quit()
 
-    # Schedule the next notification after 15 seconds
-    root.after(15000, lambda: schedule_notification(root))
+# Notification()
 
-
-def initiate_tk():
-    root = tk.Tk()
-    root.withdraw()
-    return root
-
-if __name__ == "__main__":
-    root = initiate_tk()  
-    # Start the notification loop
-    schedule_notification(root)
-
-    # Run the event loop
-    root.mainloop()
+    
 

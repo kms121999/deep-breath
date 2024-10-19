@@ -5,12 +5,12 @@ from ProcessSettings import ProcessSettings
 DEFAULT_SETTINGS = {
     "processSettings": {
     },
-    "interactionIntensity": 1,
+    "interaction_intensity": 1,
     "color": 'red',
     "notification_frequency_min": 5,
     "quotes": True,
-    "goals": False
-
+    "goals": False,
+    "default_warning_time": 5,
 }
 
 SETTINGS_FILE = 'data/user_settings.pkl'

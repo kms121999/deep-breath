@@ -22,6 +22,8 @@ class ProcessSettings:
 
         self.weekly_limit = WeekLimit()
 
+        self.warning_time = -1
+
     def check_time_limit(self, state):
         pass
     
@@ -49,9 +51,16 @@ class ProcessSettings:
                 "remaining": self.weekly_limit.time_limit - trackedProcess.get_week_total()
                 })
 
-        
         return min(limits, key = lambda x: x['remaining'])
-        
+    
+    def bridge_session(self, sessionAEnd, sessionBStart):
+        if sessionBStart - sessionAEnd <= self.session_sliding_window:
+            return True
+        else:
+            return False
+
+    def get_warning_time(self):
+        return self.warning_time        
     
 class TimeLimit:
     def __init__(self):

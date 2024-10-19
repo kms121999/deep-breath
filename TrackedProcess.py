@@ -10,8 +10,13 @@ class TrackedProcess:
 
         self.session_limit = 0
 
-    def get_week_total(self):
+    def get_session_total(self):
         pass
 
     def get_day_total(self):
         pass
+    
+    def get_week_total(self):
+        pass
+
+    

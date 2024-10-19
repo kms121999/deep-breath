@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import Qt, QTimer
 import json
 import random
+import os
 
 class Notification:
     def __init__(self):
@@ -11,6 +12,9 @@ class Notification:
         self.y1 = 10
         self.x2 = 300
         self.y2 = 100
+        self.color = 'red'
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        self.quotes_dir =  os.path.join(base_dir, 'quotes.json')
 
     def is_alive(self):
         return self.alive
@@ -19,7 +23,8 @@ class Notification:
         '''
         :fun: This will pull a quote from 
         '''
-        with open('notifications/quotes.json', 'r') as file:
+        print("Current working directory:", os.getcwd())
+        with open(self.quotes_dir, 'r') as file:
             data = json.load(file)
             quotes = data['inspirational_quotes_and_goals']
             length_quotes = len(quotes) - 1
@@ -42,7 +47,7 @@ class Notification:
         notification.setWindowOpacity(0.5)
 
         # Customize background and label
-        notification.setStyleSheet("background-color: darkblue; border-radius: 10px;")
+        notification.setStyleSheet(f"background-color: {self.color}; border-radius: 10px;")
         layout = QtWidgets.QVBoxLayout(notification)
 
         # Add custom label

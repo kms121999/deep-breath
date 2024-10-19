@@ -3,7 +3,7 @@ import websockets
 import pickle
 import tkinter as tk
 from tkinter import messagebox
-from SettingClient import SettingClient
+from setting_management.SettingClient import SettingClient
 
 class App(tk.Tk):
     def __init__(self):

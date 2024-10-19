@@ -1,6 +1,6 @@
 import pickle
 import threading
-from ProcessSettings import ProcessSettings
+from setting_management.ProcessSettings import ProcessSettings
 
 DEFAULT_SETTINGS = {
     "processSettings": {

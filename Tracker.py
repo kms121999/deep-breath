@@ -82,10 +82,12 @@ class Tracker():
             process_settings = self.setting_manager.get_process(process.name())
 
             # If the remaining limit is 0
-            if process_settings.get_remaining_limit(process.name(), datetime.weekday(datetime.now())) == 0:
+            if process_settings:
+                if process_settings.daily_limit[0].time_limit <= self.monitored_processes[process.name()]['time']:
+                    self.Notification.create_notification("You've been on too long!!")
+                    ...
                 # Here is where the process is killed
                 # os.system(f'taskkill /f /im {process[0]}')
-                ...
 
     def update_reset(self, monitored_processes):
         """

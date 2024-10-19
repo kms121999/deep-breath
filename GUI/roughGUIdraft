@@ -64,7 +64,7 @@ messageTypeEntry.pack(pady=5)
 
 # Function to handle button click
 def submit_click():
-    summary_text = "after "+timeEntry.get()+" minutes in a "+timeScaleTypes[var.get()]+" I'll send you a "+colorEntry.get()+" "+messageTypeEntry.get()+" message and "+("shutdown" if shutdownEntry.get() else "not shutdown")
+    summary_text = "after "+timeEntry.get()+" minutes in a "+timeScaleTypes[var.get()]+" I'll send you a "+colorEntry.get()+" "+messageTypeEntry.get()+" message and "+("shutdown" if shutdownEntry.get().lower()=="true" else "not shutdown")
     summaryLabel.config(text=f"So, {summary_text}. Sound good?")  # Update the label with the input text
     #session, day, week
 

@@ -2,12 +2,14 @@ import psutil
 from datetime import datetime
 import time
 import os
+from notifications.Notification import Notification
 
 class Tracker():
     def __init__(self):
         self.monitored_processes = {}
         self.running = True
         self.single_tick = 5.0
+        self.Notification = Notification()
 
     def add_monitored_process(self,name, dictionary):
         self.monitored_processes[name] = dictionary
@@ -29,8 +31,10 @@ class Tracker():
     def check_limit_status(self):
         for process in self.monitored_processes.items():
             if process[1]['time'] == process[1]['session_limit']:
+                # Here is where the process is killed
                 os.system(f'taskkill /f /im {process[0]}')
-                print("User notification of session expiration")
+                self.Notification.display_notification()
+                
 
     def update_reset(self, monitored_processes):
         """

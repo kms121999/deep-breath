@@ -19,7 +19,7 @@ class Notification:
         '''
         :fun: This will pull a quote from 
         '''
-        with open('/quotes.json', 'r') as file:
+        with open('notifications/quotes.json', 'r') as file:
             data = json.load(file)
             quotes = data['inspirational_quotes_and_goals']
             length_quotes = len(quotes) - 1

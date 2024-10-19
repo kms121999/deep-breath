@@ -101,6 +101,7 @@ class SettingServer:
 # Example usage
 if __name__ == "__main__":
     import SettingManager  # Assuming SettingManager is defined elsewhere
+    from setting_client_gui_example import App
 
     # Create the SettingServer instance
     setting_manager = SettingManager.SettingManager()
@@ -113,7 +114,8 @@ if __name__ == "__main__":
     try:
         # Main thread can do other things here (e.g., running a GUI)
         while True:
-            pass  # Replace this with actual main thread logic, like a Tkinter event loop
+            app = App()
+            app.mainloop()  # Replace this with actual main thread logic, like a Tkinter event loop
     except KeyboardInterrupt:
         print("Stopping server...")
         ws_server.stop()

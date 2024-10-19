@@ -1,9 +1,14 @@
 import pickle
 
 DEFAULT_SETTINGS = {
-    'processSettings': {
+    "processSettings": {
     },
-    'interactionIntensity': 1,
+    "interactionIntensity": 1,
+    "color": 'red',
+    "notification_frequency_min": 5,
+    "quotes": True,
+    "Goals": False
+
 }
 
 class SettingManager:

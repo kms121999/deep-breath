@@ -6,7 +6,7 @@ DEFAULT_SETTINGS = {
     "processSettings": {
     },
     "interaction_intensity": 1,
-    "color": 'red',
+    # "theme": 'darkmode',
     "notification_frequency_min": 5,
     "quotes": True,
     "goals": False,

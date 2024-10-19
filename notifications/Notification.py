@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import Qt, QTimer
+import tkinter as tk
 import json
 import random
 import os
@@ -38,29 +39,39 @@ class Notification:
         '''
         :fun: This doesn't return anything, simply displays the notification.
         '''
-        app = QtWidgets.QApplication([])
-
-        # Create the window
-        notification = QtWidgets.QWidget()
-        notification.setWindowFlags(Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        notification.setGeometry(self.x1, self.y1, self.x2, self.y2)  # Set position and size
-        notification.setWindowOpacity(0.5)
-
-        # Customize background and label
-        notification.setStyleSheet(f"background-color: {self.color}; border-radius: 10px;")
-        layout = QtWidgets.QVBoxLayout(notification)
-
-        # Add custom label
         quote = self.get_random_quote()
-        label = QtWidgets.QLabel(quote)
-        label.setFont(QtGui.QFont("Arial", 14))
-        label.setAlignment(Qt.AlignCenter)
-        layout.addWidget(label)
+        root = tk.Tk()
+        root.title("Quote of the Day")
+        root.overrideredirect(True)
+        root.geometry(f"+0+0")
+        label = tk.Label(root, text=quote, font=("Arial", 12), bg="black", fg="white", padx=10, pady=5)
+        label.pack()
+        root.after(5000, root.destroy)
+        root.mainloop()
+        #!!!!!!!!!!!!!!!
+        # app = QtWidgets.QApplication([])
 
-        # Set a timer for auto-close (similar to notification duration)
-        QTimer.singleShot(5000, notification.close)  # Closes after 5 seconds
+        # # Create the window
+        # notification = QtWidgets.QWidget()
+        # notification.setWindowFlags(Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+        # notification.setGeometry(self.x1, self.y1, self.x2, self.y2)  # Set position and size
+        # notification.setWindowOpacity(0.5)
 
-        # Show the window
-        notification.show()
+        # # Customize background and label
+        # notification.setStyleSheet(f"background-color: {self.color}; border-radius: 10px;")
+        # layout = QtWidgets.QVBoxLayout(notification)
 
-        app.exec_()  
+        # # Add custom label
+        # quote = self.get_random_quote()
+        # label = QtWidgets.QLabel(quote)
+        # label.setFont(QtGui.QFont("Arial", 14))
+        # label.setAlignment(Qt.AlignCenter)
+        # layout.addWidget(label)
+
+        # # Set a timer for auto-close (similar to notification duration)
+        # QTimer.singleShot(5000, notification.close)  # Closes after 5 seconds
+
+        # # Show the window
+        # notification.show()
+
+        # app.exec_()

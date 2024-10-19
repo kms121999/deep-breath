@@ -54,6 +54,7 @@ if __name__ == "__main__":
     color = input("New color: ")
     async def main():
         client = SettingClient()
+        global settings
         settings = {}
 
         def set_settings_callback(status, error=None):

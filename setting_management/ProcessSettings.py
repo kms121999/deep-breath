@@ -26,6 +26,8 @@ class ProcessSettings:
 
     def check_time_limit(self, state):
         pass
+
+
     
     def get_remaining_limit(self, trackedProcess, day):
         limits = []
@@ -65,7 +67,7 @@ class ProcessSettings:
 class TimeLimit:
     def __init__(self):
         # -1 means no limit
-        self.time_limit = -1
+        self.time_limit = 2
         self.active = False
 
     def set_time_limit(self, time_limit):

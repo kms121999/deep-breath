@@ -3,7 +3,6 @@ from tkinter import ttk, simpledialog, filedialog, messagebox
 from setting_management.SettingClient import SettingClient
 from setting_management.ProcessSettings import ProcessSettings
 import asyncio
-import os
 
 class SettingsApp:
     def __init__(self, root):
@@ -83,7 +82,7 @@ class SettingsApp:
         self.reset_day_entry.pack(pady=5)
 
         # Submit button for main settings
-        self.submit_button = tk.Button(self.main_frame, text="Submit Settings", command=self.submit_settings)
+        self.submit_button = tk.Button(self.main_frame, text="Save Changes", command=self.submit_settings)
         self.submit_button.pack(pady=10)
 
     def create_process_widgets(self):
@@ -95,12 +94,15 @@ class SettingsApp:
         self.add_process_button = tk.Button(self.process_frame, text="Add Process", command=self.add_process)
         self.add_process_button.pack(pady=10)
 
-        # Bind double click to edit and right click to delete
+        # Button to delete selected process
+        self.delete_process_button = tk.Button(self.process_frame, text="Delete Selected Process", command=self.delete_process)
+        self.delete_process_button.pack(pady=10)
+
+        # Bind double click to edit
         self.process_list.bind("<Double-Button-1>", self.edit_process)
-        self.process_list.bind("<Button-3>", self.delete_process)
 
         # Submit button for process management
-        self.process_submit_button = tk.Button(self.process_frame, text="Submit Processes", command=self.submit_processes)
+        self.process_submit_button = tk.Button(self.process_frame, text="Save Changes", command=self.submit_processes)
         self.process_submit_button.pack(pady=10)
 
     def fetch_settings(self):
@@ -160,9 +162,6 @@ class SettingsApp:
         if not exe_file:
             return  # User cancelled the file dialog
 
-        # Get only the executable name and extension
-        exe_file = os.path.basename(exe_file)
-
         label = simpledialog.askstring("Input", "Enter a label for the process:")
         if label is None:
             return  # User cancelled the input dialog
@@ -200,7 +199,7 @@ class SettingsApp:
         # Refresh the process list
         self.populate_processes()
 
-    def delete_process(self, event):
+    def delete_process(self):
         selected_index = self.process_list.curselection()
         if not selected_index:
             return  # No selection

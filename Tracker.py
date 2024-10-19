@@ -3,9 +3,11 @@ from datetime import datetime
 import time
 import os
 from notifications.Notification2 import Notification
+from setting_management.SettingManager import SettingManager
 
 class Tracker():
     def __init__(self):
+        self.setting_manager = SettingManager()
         self.monitored_processes = {}
         self.running = True
         self.single_tick = 5.0
@@ -33,6 +35,8 @@ class Tracker():
         This function checks to see if the monitored processes time use exceeds certain limits.
         Here is where it is decided on how to handle the user :)
         """
+        settings = self.setting_manager.get_settings()
+        print(settings)
         for process in self.monitored_processes.items():
             # If the processes current time is equal to the session limit, 
             if process[1]['time'] >= process[1]['session_limit']:
@@ -64,6 +68,9 @@ class Tracker():
             # Check if the user has exceeded their time limit
             self.check_limit_status()
             self.Notification()
+
+            #! For testing purposes only
+            self.running = False
 
 
 tracker = Tracker()

@@ -6,6 +6,8 @@ def Notification():
     # Create the window
     win = Window()
 
+    win.size = (700,800)
+
     # Change the title of the window
     win.root.title("Custom Notification")
 
@@ -17,7 +19,7 @@ def Notification():
 
     # Create the HTMLLabel with your HTML content
     my_label = HTMLLabel(win.root, html=""" 
-        <h1 style="color: lightblue;">DeepBreath</h1>
+        <iframe src="demo_iframe.htm" height="200" width="300" title="Iframe Example"></iframe>
     """)
 
     # Pack the HTMLLabel into the window
@@ -27,14 +29,10 @@ def Notification():
     label = tk.Label(win.root, text="Hey", font=("Arial", 14), bg="lightblue", fg="black")
     label.pack(pady=20, padx=20)
 
-    win.root.after(5000,win.root.destroy)
-
     # Launch the window
     win.root.mainloop()
 
-    # win.root.quit()
-
-# Notification()
+Notification()
 
     
 

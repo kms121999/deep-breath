@@ -1,5 +1,6 @@
 import pickle
 import threading
+from ProcessSettings import ProcessSettings
 
 DEFAULT_SETTINGS = {
     "processSettings": {
@@ -46,5 +47,12 @@ class SettingManager:
                 pickle.dump(settings, file)
 
     def get(self, key):
+        # Probably don't need this lock in practice
         with self.lock:
             return self.settings.get(key)
+        
+    @staticmethod
+    def addProcessSettings(settings, label, executable_name):
+        process_settings = ProcessSettings(label, executable_name)
+        settings['processSettings'][executable_name] = process_settings
+        return settings

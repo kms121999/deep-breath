@@ -4,6 +4,7 @@ import time
 import os
 from notifications.Notification import Notification
 from setting_management.SettingManager import SettingManager
+from Tracker_ds import tally_ds
 
 class Tracker():
     """
@@ -11,6 +12,7 @@ class Tracker():
     the program looping a single minute at a time.
     """
     def __init__(self):
+        self.tally = tally_ds()
         self.setting_manager = SettingManager()
         self.monitored_processes = {}
         self.running = True
@@ -34,6 +36,7 @@ class Tracker():
                 self.monitored_processes[process.name()] = {"time" : 0, "updated" : False}
 
             if self.monitored_processes[process.name()]["updated"] == False:
+
                 self.monitored_processes[process.name()]["time"] += 1
                 self.monitored_processes[process.name()]["updated"] = True
 
@@ -80,12 +83,12 @@ class Tracker():
 
             print(self.monitored_processes["chrome.exe"])
             # Display handy notification
-            self.Notification.display_notification()
+            self.Notification.get_quote_api('happiness')
 
 
 
 tracker = Tracker()
-tracker.add_monitored_process("chrome.exe", {"time" : 10, "start_time" : 0, "session_limit" : 5, "updated" : False})
+tracker.add_monitored_process("chrome.exe", {"time" : 0, "updated" : False})
 
 tracker.tick()
 

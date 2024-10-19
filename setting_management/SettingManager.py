@@ -11,8 +11,10 @@ DEFAULT_SETTINGS = {
     "quotes": True,
     "goals": False,
     "default_warning_time": 5,
-    "reset_time": 3,
-    "week_reset_day": 0,
+    "reset_times": {
+        "hour": 3,
+        "day": 0
+    }
 }
 
 SETTINGS_FILE = 'data/user_settings.pkl'

@@ -115,23 +115,3 @@ class Tracker():
             print(self.monitored_processes["chrome.exe"])
             # Display handy notification
             self.Notification.get_quote_api('happiness')
-
-
-
-tracker = Tracker()
-tracker.add_monitored_process("chrome.exe", {"time" : 0, "updated" : False})
-
-tracker.tick()
-
-# print(monitored_processes["chrome.exe"]["time"])
-# # Get list of active processes
-# for process in psutil.process_iter():
-#     if process.name() in and monitored_processes[process.name()]["updated"] == False:
-#         monitored_processes[process.name()]["time"] += 1
-#         monitored_processes[process.name()]["updated"] = True
-
-# update_reset()
-
-# print(monitored_processes["chrome.exe"]["time"])
-
-

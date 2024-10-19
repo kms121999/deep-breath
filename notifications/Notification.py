@@ -4,7 +4,6 @@ import tkinter as tk
 import json
 import random
 import os
-import overlay
 
 class Notification:
     def __init__(self):

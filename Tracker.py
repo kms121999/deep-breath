@@ -2,7 +2,7 @@ import psutil
 from datetime import datetime
 import time
 import os
-from notifications.Notification import Notification
+from notifications.Notification2 import Notification
 
 class Tracker():
     def __init__(self):
@@ -37,8 +37,8 @@ class Tracker():
             # If the processes current time is equal to the session limit, 
             if process[1]['time'] >= process[1]['session_limit']:
                 # Here is where the process is killed
-                os.system(f'taskkill /f /im {process[0]}')
-                self.Notification.display_notification()
+                # os.system(f'taskkill /f /im {process[0]}')
+                ...
                 
 
     def update_reset(self, monitored_processes):
@@ -63,6 +63,7 @@ class Tracker():
             self.update_monitored_processes(processes)
             # Check if the user has exceeded their time limit
             self.check_limit_status()
+            self.Notification()
 
 
 tracker = Tracker()

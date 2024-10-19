@@ -4,6 +4,7 @@ import tkinter as tk
 import json
 import random
 import os
+import overlay
 
 class Notification:
     def __init__(self):
@@ -44,6 +45,7 @@ class Notification:
         root.title("Quote of the Day")
         root.overrideredirect(True)
         root.geometry(f"+0+0")
+        root.wm_attributes("-fullscreen", 1)  # Always on top
         label = tk.Label(root, text=quote, font=("Arial", 12), bg="black", fg="white", padx=10, pady=5)
         label.pack()
         root.after(5000, root.destroy)

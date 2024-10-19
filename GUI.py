@@ -39,72 +39,79 @@ class SettingsApp:
         self.root.after(0, self.fetch_settings)
 
     def create_widgets(self):
+        # Use grid layout for main settings to control positioning
+        self.main_frame.columnconfigure(0, weight=1)
+        self.main_frame.columnconfigure(1, weight=2)
+
         # Interaction intensity
         self.intensity_label = tk.Label(self.main_frame, text="Interaction Intensity:")
-        self.intensity_label.pack(pady=5)
+        self.intensity_label.grid(row=0, column=0, sticky=tk.W, padx=5, pady=5)
         self.intensity_scale = tk.Scale(self.main_frame, from_=1, to=10, orient=tk.HORIZONTAL)
-        self.intensity_scale.pack(pady=5)
+        self.intensity_scale.grid(row=0, column=1, sticky=tk.EW, padx=5, pady=5)
 
         # Notification frequency (minutes)
         self.notif_freq_label = tk.Label(self.main_frame, text="Notification Frequency (minutes):")
-        self.notif_freq_label.pack(pady=5)
+        self.notif_freq_label.grid(row=1, column=0, sticky=tk.W, padx=5, pady=5)
         self.notif_freq_entry = tk.Entry(self.main_frame)
-        self.notif_freq_entry.pack(pady=5)
+        self.notif_freq_entry.grid(row=1, column=1, sticky=tk.EW, padx=5, pady=5)
 
         # Quotes (True/False)
         self.quotes_label = tk.Label(self.main_frame, text="Enable Quotes:")
-        self.quotes_label.pack(pady=5)
+        self.quotes_label.grid(row=2, column=0, sticky=tk.W, padx=5, pady=5)
         self.quotes_var = tk.BooleanVar()
         self.quotes_check = tk.Checkbutton(self.main_frame, text="Quotes", variable=self.quotes_var)
-        self.quotes_check.pack(pady=5)
+        self.quotes_check.grid(row=2, column=1, sticky=tk.W, padx=5, pady=5)
 
         # Goals (True/False)
         self.goals_label = tk.Label(self.main_frame, text="Enable Goals:")
-        self.goals_label.pack(pady=5)
+        self.goals_label.grid(row=3, column=0, sticky=tk.W, padx=5, pady=5)
         self.goals_var = tk.BooleanVar()
         self.goals_check = tk.Checkbutton(self.main_frame, text="Goals", variable=self.goals_var)
-        self.goals_check.pack(pady=5)
+        self.goals_check.grid(row=3, column=1, sticky=tk.W, padx=5, pady=5)
 
         # Default warning time (minutes)
         self.warning_time_label = tk.Label(self.main_frame, text="Default Warning Time (minutes):")
-        self.warning_time_label.pack(pady=5)
+        self.warning_time_label.grid(row=4, column=0, sticky=tk.W, padx=5, pady=5)
         self.warning_time_entry = tk.Entry(self.main_frame)
-        self.warning_time_entry.pack(pady=5)
+        self.warning_time_entry.grid(row=4, column=1, sticky=tk.EW, padx=5, pady=5)
 
         # Reset times (hour and day)
         self.reset_time_label = tk.Label(self.main_frame, text="Reset Time (Hour of day):")
-        self.reset_time_label.pack(pady=5)
+        self.reset_time_label.grid(row=5, column=0, sticky=tk.W, padx=5, pady=5)
         self.reset_time_entry = tk.Entry(self.main_frame)
-        self.reset_time_entry.pack(pady=5)
+        self.reset_time_entry.grid(row=5, column=1, sticky=tk.EW, padx=5, pady=5)
 
         self.reset_day_label = tk.Label(self.main_frame, text="Reset Day (0=Sunday, 6=Saturday):")
-        self.reset_day_label.pack(pady=5)
+        self.reset_day_label.grid(row=6, column=0, sticky=tk.W, padx=5, pady=5)
         self.reset_day_entry = tk.Entry(self.main_frame)
-        self.reset_day_entry.pack(pady=5)
+        self.reset_day_entry.grid(row=6, column=1, sticky=tk.EW, padx=5, pady=5)
 
         # Submit button for main settings
         self.submit_button = tk.Button(self.main_frame, text="Save Changes", command=self.submit_settings)
-        self.submit_button.pack(pady=10)
+        self.submit_button.grid(row=7, column=0, columnspan=2, pady=10)
 
     def create_process_widgets(self):
+        # Use grid layout for process management
+        self.process_frame.columnconfigure(0, weight=1)
+
         # Process list
         self.process_list = tk.Listbox(self.process_frame)
-        self.process_list.pack(fill=tk.BOTH, expand=True)
+        self.process_list.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         # Button to add process
         self.add_process_button = tk.Button(self.process_frame, text="Add Process", command=self.add_process)
-        self.add_process_button.pack(pady=10)
+        self.add_process_button.pack(pady=5)
 
         # Button to delete selected process
         self.delete_process_button = tk.Button(self.process_frame, text="Delete Selected Process", command=self.delete_process)
-        self.delete_process_button.pack(pady=10)
+        self.delete_process_button.pack(pady=5)
 
         # Bind double click to edit
         self.process_list.bind("<Double-Button-1>", self.edit_process)
 
         # Submit button for process management
         self.process_submit_button = tk.Button(self.process_frame, text="Save Processes", command=self.submit_processes)
-        self.process_submit_button.pack(pady=10)
+        self.process_submit_button.pack(pady=5)
 
     def fetch_settings(self):
         async def get_settings():

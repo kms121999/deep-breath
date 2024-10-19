@@ -3,6 +3,7 @@ from tkinter import ttk, simpledialog, filedialog, messagebox
 from setting_management.SettingClient import SettingClient
 from setting_management.ProcessSettings import ProcessSettings
 import asyncio
+import os
 
 class SettingsApp:
     def __init__(self, root):
@@ -102,7 +103,7 @@ class SettingsApp:
         self.process_list.bind("<Double-Button-1>", self.edit_process)
 
         # Submit button for process management
-        self.process_submit_button = tk.Button(self.process_frame, text="Save Changes", command=self.submit_processes)
+        self.process_submit_button = tk.Button(self.process_frame, text="Save Processes", command=self.submit_processes)
         self.process_submit_button.pack(pady=10)
 
     def fetch_settings(self):
@@ -161,6 +162,9 @@ class SettingsApp:
         exe_file = filedialog.askopenfilename(title="Select Executable", filetypes=[("Executable Files", "*.exe")])
         if not exe_file:
             return  # User cancelled the file dialog
+        
+        # Get only the executable name and extension
+        exe_file = os.path.basename(exe_file)
 
         label = simpledialog.askstring("Input", "Enter a label for the process:")
         if label is None:

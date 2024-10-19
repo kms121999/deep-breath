@@ -243,25 +243,7 @@ class SettingsApp:
 
         asyncio.run(update_processes())
 
-# Run the application
 if __name__ == "__main__":
-    from setting_management.SettingServer import SettingServer
-    from setting_management.SettingManager import SettingManager
-
-    # Create the SettingServer instance
-    setting_manager = SettingManager()
-    ws_server = SettingServer(setting_manager, host="localhost", port=8765)
-
-    # Start the WebSocket server in a separate thread
-    ws_server.start()
-    print("Server started in a background thread.")
-
-    try:
-        # Main thread can do other things here (e.g., running a GUI)
-        root = tk.Tk()
-        app = SettingsApp(root)
-        root.mainloop()
-    except KeyboardInterrupt:
-        print("Stopping server...")
-        ws_server.stop()
-        print("Server stopped gracefully.")
+    root = tk.Tk()
+    app = SettingsApp(root)
+    root.mainloop()

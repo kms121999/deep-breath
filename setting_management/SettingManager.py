@@ -51,6 +51,10 @@ class SettingManager:
         with self.lock:
             return self.settings.get(key)
         
+    def get_process(self, executable_name):
+        with self.lock:
+            return self.settings['processSettings'].get(executable_name)
+        
     @staticmethod
     def addProcessSettings(settings, label, executable_name):
         process_settings = ProcessSettings(label, executable_name)

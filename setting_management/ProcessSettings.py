@@ -25,20 +25,32 @@ class ProcessSettings:
     def check_time_limit(self, state):
         pass
     
-    def get_remaining_session_limit(self, trackedProcess, state):
+    def get_remaining_limit(self, trackedProcess, day):
         limits = []
         
         # Session
         if self.session_limit != -1:
-            limits.append(self.session_limit - trackedProcess.get_session_total())
+            limits.append({
+                "limitType": "session",
+                "remaining": self.session_limit - trackedProcess.get_session_total()
+                })
 
         # Day
-        if self.daily_limit[state['day']].time_limit != -1:
-            limits.append(self.daily_limit[state['day']].time_limit - trackedProcess.get_day_total())
+        if self.daily_limit[day].time_limit != -1:
+            limits.append({
+                "limitType": "daily",
+                "remaining": self.daily_limit[day].time_limit - trackedProcess.get_day_total()
+                })
+        
         # Week
+        if self.weekly_limit.time_limit != -1:
+            limits.append({
+                "limitType": "weekly",
+                "remaining": self.weekly_limit.time_limit - trackedProcess.get_week_total()
+                })
 
         
-        return min(*limits)
+        return min(limits, key = lambda x: x['remaining'])
         
     
 class TimeLimit:

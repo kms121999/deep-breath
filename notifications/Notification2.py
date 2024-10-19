@@ -83,11 +83,14 @@ def schedule_notification(root):
     # Schedule the next notification after 15 seconds
     root.after(15000, lambda: schedule_notification(root))
 
-if __name__ == "__main__":
-    # Create the main Tk instance (only one!)
-    root = tk.Tk()
-    root.withdraw()  # Hide the main window, as we're only using Toplevel notifications
 
+def initiate_tk():
+    root = tk.Tk()
+    root.withdraw()
+    return root
+
+if __name__ == "__main__":
+    root = initiate_tk()  
     # Start the notification loop
     schedule_notification(root)
 

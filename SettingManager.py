@@ -7,7 +7,7 @@ DEFAULT_SETTINGS = {
     "color": 'red',
     "notification_frequency_min": 5,
     "quotes": True,
-    "Goals": False
+    "goals": False
 
 }
 

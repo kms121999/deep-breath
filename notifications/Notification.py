@@ -63,4 +63,4 @@ class Notification:
         # Show the window
         notification.show()
 
-        app.exec_()  
+        app.exec_()

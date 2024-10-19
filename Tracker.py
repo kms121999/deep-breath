@@ -3,9 +3,11 @@ from datetime import datetime
 import time
 import os
 from notifications.Notification2 import Notification
+from setting_management.SettingManager import SettingManager
 
 class Tracker():
     def __init__(self):
+        self.setting_manager = SettingManager()
         self.monitored_processes = {}
         self.running = True
         self.single_tick = 5.0

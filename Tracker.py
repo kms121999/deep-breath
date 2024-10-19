@@ -37,7 +37,7 @@ class Tracker():
         """
         settings = self.setting_manager.get_settings()
         print(settings)
-        for process in self.monitored_processes.items():
+        for process in self.settings.items():
             # If the processes current time is equal to the session limit, 
             if process[1]['time'] >= process[1]['session_limit']:
                 # Here is where the process is killed

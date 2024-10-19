@@ -5,7 +5,6 @@ import json
 import random
 import os
 import requests
-from dotenv import load_dotenv
 
 class Notification:
     def __init__(self):
@@ -68,13 +67,17 @@ class Notification:
         root.geometry(f"+0+20")  # Position the window
 
         root.attributes('-alpha', 0.8)
+        root.attributes('-topmost', True)
+
+        # canvas = tk.Canvas(root, width=300, height=40, bg="white", highlightthickness=0)
+        # canvas.pack()
 
         # Create a label with line wrapping
         label = tk.Label(
             root, 
             text=quote, 
             font=("Arial", 12), 
-            bg="black", 
+            bg="darkblue", 
             fg="white", 
             padx=10, 
             pady=5, 
@@ -90,7 +93,40 @@ class Notification:
         root.after(10000, root.destroy)
         root.mainloop()
 
+    def create_notification(self, message):
 
+            # Create a tkinter root window
+            root = tk.Tk()
+            root.title("Notify")
+            root.overrideredirect(True)
+            root.geometry(f"+0+20")  # Position the window
+
+            root.attributes('-alpha', 0.8)
+            root.attributes('-topmost', True)
+
+            # canvas = tk.Canvas(root, width=300, height=40, bg="white", highlightthickness=0)
+            # canvas.pack()
+
+            # Create a label with line wrapping
+            label = tk.Label(
+                root, 
+                text=message, 
+                font=("Arial", 12), 
+                bg="darkblue", 
+                fg="white", 
+                padx=10, 
+                pady=5, 
+                wraplength=600  # Set the wraplength in pixels (adjust as needed)
+            )
+            
+            label.pack()
+
+            # Start the sliding animation (move from -100 to 20 pixels down)
+            self.slide_in(root, start_y=-100, target_y=20, step=5, delay=10)
+
+            # Destroy the notification after 5 seconds
+            root.after(10000, root.destroy)
+            root.mainloop()
 
     def display_notification(self):
         '''

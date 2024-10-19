@@ -18,11 +18,40 @@ class Tracker():
         self.running = True
         self.single_tick = 5.0
         self.Notification = Notification()
+        self.Tally_ds = tally_ds()
 
     def add_monitored_process(self,name, dictionary):
         self.monitored_processes[name] = dictionary
 
     def check_reset_times(self, reset_time):
+        now = datetime.now()
+        curr_date = now.date()
+        curr_day = now.date
+        curr_month = now.month
+        curr_year = now.year
+        file_path = 'date.txt'
+        if os.path.exists(file_path):
+            with open(file_path, 'r+') as file:
+                # Get the info from the file
+                last_date = file.read()
+                date_list = []
+                for section in last_date:
+                    date_list.append(section)
+                last_year = date_list[0]
+                last_month = date_list[1]
+                last_day = date_list[2]
+                # Logic
+                if last_year == str(curr_year):
+                    
+                    if last_month == str(curr_month):
+                        
+                        if last_day != str(curr_day):
+                            self.Tally_ds.reset_tally("daily_tally")
+                            file.truncate(0)
+                            file.write([curr_year, curr_month, curr_day])
+
+
+
         if datetime.weekday(datetime.now()) == reset_time["day"] and datetime.now().hour == reset_time["hour"] or\
             datetime.now().hour == reset_time["day"]:
             for process in self.monitored_processes.items():
@@ -32,13 +61,15 @@ class Tracker():
     def update_monitored_processes(self, processes):
         
         for process in processes:
-            if process.name() not in self.monitored_processes.keys():
-                self.monitored_processes[process.name()] = {"time" : 0, "updated" : False}
+            exe = process.name() # the process name as a string
+            if exe not in self.monitored_processes.keys():
+                self.monitored_processes[exe] = {"time" : 0, "updated" : False}
 
-            if self.monitored_processes[process.name()]["updated"] == False:
-
-                self.monitored_processes[process.name()]["time"] += 1
-                self.monitored_processes[process.name()]["updated"] = True
+            if self.monitored_processes[exe]["updated"] == False:
+                self.monitored_processes[exe]["time"] += 1
+                print(f'!!!!!!!!!!!!!!!!!!!! {exe}')
+                self.Tally_ds.update_tallies(exe)
+                self.monitored_processes[exe]["updated"] = True
 
         self.update_reset(self.monitored_processes)
 
@@ -84,23 +115,3 @@ class Tracker():
             print(self.monitored_processes["chrome.exe"])
             # Display handy notification
             self.Notification.get_quote_api('happiness')
-
-
-
-tracker = Tracker()
-tracker.add_monitored_process("chrome.exe", {"time" : 0, "updated" : False})
-
-tracker.tick()
-
-# print(monitored_processes["chrome.exe"]["time"])
-# # Get list of active processes
-# for process in psutil.process_iter():
-#     if process.name() in and monitored_processes[process.name()]["updated"] == False:
-#         monitored_processes[process.name()]["time"] += 1
-#         monitored_processes[process.name()]["updated"] = True
-
-# update_reset()
-
-# print(monitored_processes["chrome.exe"]["time"])
-
-

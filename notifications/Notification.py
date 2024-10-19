@@ -1,21 +1,44 @@
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import Qt, QTimer
+import json
+import random
 
 class Notification:
-    def __init__(self, message):
+    def __init__(self):
         self.alive = True
-        self.quote = message
+        # self.quote = self.get_random_quote() or message
+        self.x1 = 10
+        self.y1 = 10
+        self.x2 = 300
+        self.y2 = 100
 
     def is_alive(self):
         return self.alive
+    
+    def get_random_quote(self):
+        '''
+        :fun: This will pull a quote from 
+        '''
+        with open('/quotes.json', 'r') as file:
+            data = json.load(file)
+            quotes = data['inspirational_quotes_and_goals']
+            length_quotes = len(quotes) - 1
+            random_index = random.randint(0, length_quotes)
+            selected_quote = quotes[random_index]
+
+        return [selected_quote['author'], selected_quote['quote']]
+
 
     def display_notification(self):
+        '''
+        :fun: This doesn't return anything, simply displays the notification.
+        '''
         app = QtWidgets.QApplication([])
 
         # Create the window
         notification = QtWidgets.QWidget()
         notification.setWindowFlags(Qt.Tool | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
-        notification.setGeometry(10, 10, 300, 100)  # Set position and size
+        notification.setGeometry(self.x1, self.y1, self.x2, self.y2)  # Set position and size
         notification.setWindowOpacity(0.5)
 
         # Customize background and label
@@ -23,7 +46,8 @@ class Notification:
         layout = QtWidgets.QVBoxLayout(notification)
 
         # Add custom label
-        label = QtWidgets.QLabel(self.quote)
+        quote = self.get_random_quote()
+        label = QtWidgets.QLabel(quote)
         label.setFont(QtGui.QFont("Arial", 14))
         label.setAlignment(Qt.AlignCenter)
         layout.addWidget(label)
@@ -34,8 +58,4 @@ class Notification:
         # Show the window
         notification.show()
 
-        app.exec_()
-
-    #TODO - Get_inspiring_quote()
-
-    #TODO - Get_homework_assignment()  
+        app.exec_()  

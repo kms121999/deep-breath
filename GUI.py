@@ -81,7 +81,7 @@ class SettingsApp:
         self.reset_time_entry = tk.Entry(self.main_frame)
         self.reset_time_entry.grid(row=5, column=1, sticky=tk.EW, padx=5, pady=5)
 
-        self.reset_day_label = tk.Label(self.main_frame, text="Reset Day (0=Sunday, 6=Saturday):")
+        self.reset_day_label = tk.Label(self.main_frame, text="Reset Day (0=Monday, 6=Sunday):")
         self.reset_day_label.grid(row=6, column=0, sticky=tk.W, padx=5, pady=5)
         self.reset_day_entry = tk.Entry(self.main_frame)
         self.reset_day_entry.grid(row=6, column=1, sticky=tk.EW, padx=5, pady=5)

@@ -84,10 +84,15 @@ class SettingServer:
         """
         if self.loop and self.server:
             # Close the WebSocket server
-            self.loop.call_soon_threadsafe(self.server.close)
+            async def shutdown():
+                await self.server.wait_closed()
 
-            # Stop the asyncio event loop
-            self.loop.call_soon_threadsafe(self.loop.stop)
+            # Safely close the server and stop the event loop
+            self.loop.call_soon_threadsafe(self.server.close)
+            shutdown_future = asyncio.run_coroutine_threadsafe(shutdown(), self.loop)
+
+            # Stop the asyncio event loop after the server is shutdown
+            shutdown_future.add_done_callback(lambda f:self.loop.call_soon_threadsafe(self.loop.stop))
 
             # Wait for the thread to finish
             self.thread.join()

@@ -100,11 +100,11 @@ class SettingServer:
 
 # Example usage
 if __name__ == "__main__":
-    import SettingManager  # Assuming SettingManager is defined elsewhere
+    from SettingManager import SettingManager
     from setting_client_gui_example import App
 
     # Create the SettingServer instance
-    setting_manager = SettingManager.SettingManager()
+    setting_manager = SettingManager()
     ws_server = SettingServer(setting_manager, host="localhost", port=8765)
 
     # Start the WebSocket server in a separate thread

@@ -26,7 +26,7 @@ class Notification:
             random_index = random.randint(0, length_quotes)
             selected_quote = quotes[random_index]
 
-        return [selected_quote['author'], selected_quote['quote']]
+        return selected_quote['quote']
 
 
     def display_notification(self):

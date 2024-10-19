@@ -6,6 +6,10 @@ from notifications.Notification import Notification
 from setting_management.SettingManager import SettingManager
 
 class Tracker():
+    """
+    Tracker is a data structure that sets the pace for our program. Tracker holds the loop that keeps
+    the program looping a single minute at a time.
+    """
     def __init__(self):
         self.setting_manager = SettingManager()
         self.monitored_processes = {}
@@ -16,34 +20,38 @@ class Tracker():
     def add_monitored_process(self,name, dictionary):
         self.monitored_processes[name] = dictionary
 
-    def edit_monitored_process():
-        ...
+    def check_reset_times(self, reset_time):
+        if datetime.weekday(datetime.now()) == reset_time["day"] and datetime.now().hour == reset_time["hour"] or\
+            datetime.now().hour == reset_time["day"]:
+            for process in self.monitored_processes.items():
+                process[1]["time"] = 0
+                self.monitored_processes[process[0]]["updated"] = False
 
     def update_monitored_processes(self, processes):
         
         for process in processes:
-            # If the process is in our list of monitored processes, we will update it's time
-            if process.name() in self.monitored_processes.keys() and self.monitored_processes[process.name()]["updated"] == False:
+            if process.name() not in self.monitored_processes.keys():
+                self.monitored_processes[process.name()] = {"time" : 0, "updated" : False}
+
+            if self.monitored_processes[process.name()]["updated"] == False:
                 self.monitored_processes[process.name()]["time"] += 1
                 self.monitored_processes[process.name()]["updated"] = True
-                print(self.monitored_processes[process.name()]["time"])
 
         self.update_reset(self.monitored_processes)
 
-    def check_limit_status(self):
+    def check_limit_status(self, processes):
         """
         This function checks to see if the monitored processes time use exceeds certain limits.
         Here is where it is decided on how to handle the user :)
         """
-        settings = self.setting_manager.get_settings()
-        print(settings)
-        for process in self.settings.items():
-            # If the processes current time is equal to the session limit, 
-            if process[1]['time'] >= process[1]['session_limit']:
+        for process in processes:
+            process_settings = self.setting_manager.get_process(process.name())
+
+            # If the remaining limit is 0
+            if process_settings.get_remaining_limit(process.name(), datetime.weekday(datetime.now())) == 0:
                 # Here is where the process is killed
                 # os.system(f'taskkill /f /im {process[0]}')
                 ...
-                
 
     def update_reset(self, monitored_processes):
         """
@@ -66,14 +74,18 @@ class Tracker():
             # Update the time of all monitored processes
             self.update_monitored_processes(processes)
             # Check if the user has exceeded their time limit
-            self.check_limit_status()
+            self.check_limit_status(processes)
+            # Checks to see if limits need a reset
+            self.check_reset_times(self.setting_manager.get("reset_times"))
+
+            print(self.monitored_processes["chrome.exe"])
+            # Display handy notification
             self.Notification.display_notification()
 
 
 
 tracker = Tracker()
-tracker.add_monitored_process("chrome.exe", {"time" : 0, "start_time" : 0, "session_limit" : 1, "updated" : False})
-# tracker.add_monitored_process("league.exe", {"time" : 0, "start_time" : 0, "session_limit" : 5, "updated" : False})
+tracker.add_monitored_process("chrome.exe", {"time" : 10, "start_time" : 0, "session_limit" : 5, "updated" : False})
 
 tracker.tick()
 

@@ -28,12 +28,7 @@ class tally_ds():
         '''
         application_info = self.my_df[exe]
         if application_info[key] is not None :
-            if application_info[key] != 0:
-                application_info[key] += 1
-            else:
-                application_info[key] = None
-            return [key, application_info[key]]
-        return [key, None]
+            application_info[key] += 1
     
     def update_tallies(self, exe):
         '''
@@ -46,7 +41,8 @@ class tally_ds():
             for my_key in self.keys:
                 self.add_to_SDW(exe, my_key)
         else:
-            self.add_exe(exe, 0, 0, 0, 0)
+            self.add_exe(exe, 0, 0, 0)
+        print(self.my_df[exe])
 
     def get_exe_SDW(self, exe):
         '''
@@ -71,5 +67,15 @@ class tally_ds():
         Given the exe name this returns the weekly tally.
         '''
         return self.my_df[exe]["weekly_tally"]
+    
+    def reset_tally(self, SDW):
+        '''
+        :arg SDW: (string) string from the following ["session_tally", 
+            "daily_tally", 
+            "weekly_tally"]
+        '''
+        for item in self.my_df.items():
+            [exe, value] = item
+            self.my_df[exe][SDW] = 0
     
 

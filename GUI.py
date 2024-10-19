@@ -1,5 +1,7 @@
 import tkinter as tk
 
+from setting_management.SettingClient import SettingClient
+
 # Create the main window
 root = tk.Tk()
 root.title("Simple Tkinter GUI")

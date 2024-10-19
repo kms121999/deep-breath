@@ -1,89 +1,162 @@
 import tkinter as tk
-
+from tkinter import ttk
 from setting_management.SettingClient import SettingClient
 
+class SettingsApp:
+    def __init__(self, root):
+        self.client = SettingClient()
+
+        root.title("Settings Manager")
+
+        # Interaction Intensity
+        self.interaction_intensity_label = tk.Label(root, text="Interaction Intensity:")
+        self.interaction_intensity_label.grid(row=0, column=0, padx=10, pady=5)
+        self.interaction_intensity_entry = tk.Entry(root)
+        self.interaction_intensity_entry.grid(row=0, column=1, padx=10, pady=5)
+
+        # Color
+        self.color_label = tk.Label(root, text="Color:")
+        self.color_label.grid(row=1, column=0, padx=10, pady=5)
+        self.color_var = tk.StringVar(value="red")
+        self.color_dropdown = ttk.Combobox(root, textvariable=self.color_var, values=["red", "gray", "white", "black"])
+        self.color_dropdown.grid(row=1, column=1, padx=10, pady=5)
+
+        # Notification Frequency
+        self.notification_label = tk.Label(root, text="Notification Frequency (min):")
+        self.notification_label.grid(row=2, column=0, padx=10, pady=5)
+        self.notification_entry = tk.Entry(root)
+        self.notification_entry.grid(row=2, column=1, padx=10, pady=5)
+
+        # Quotes (Boolean)
+        self.quotes_var = tk.BooleanVar(value=True)
+        self.quotes_checkbox = tk.Checkbutton(root, text="Quotes", variable=self.quotes_var)
+        self.quotes_checkbox.grid(row=3, column=0, columnspan=2, padx=10, pady=5)
+
+        # Goals (Boolean)
+        self.goals_var = tk.BooleanVar(value=False)
+        self.goals_checkbox = tk.Checkbutton(root, text="Goals", variable=self.goals_var)
+        self.goals_checkbox.grid(row=4, column=0, columnspan=2, padx=10, pady=5)
+
+        # Default Warning Time
+        self.warning_time_label = tk.Label(root, text="Default Warning Time (min):")
+        self.warning_time_label.grid(row=5, column=0, padx=10, pady=5)
+        self.warning_time_entry = tk.Entry(root)
+        self.warning_time_entry.grid(row=5, column=1, padx=10, pady=5)
+
+        # Reset Times (hour/day)
+        self.reset_hour_label = tk.Label(root, text="Reset Hour:")
+        self.reset_hour_label.grid(row=6, column=0, padx=10, pady=5)
+        self.reset_hour_entry = tk.Entry(root)
+        self.reset_hour_entry.grid(row=6, column=1, padx=10, pady=5)
+
+        self.reset_day_label = tk.Label(root, text="Reset Day:")
+        self.reset_day_label.grid(row=7, column=0, padx=10, pady=5)
+        self.reset_day_entry = tk.Entry(root)
+        self.reset_day_entry.grid(row=7, column=1, padx=10, pady=5)
+
+        # Submit Button
+        self.submit_button = tk.Button(root, text="Submit", command=self.submit_settings)
+        self.submit_button.grid(row=8, column=0, columnspan=2, pady=10)
+
+        # Status Label
+        self.status_label = tk.Label(root, text="")
+        self.status_label.grid(row=9, column=0, columnspan=2, pady=10)
+
+        # Fetch initial settings
+        root.after(100, self.load_settings)
+
+    def load_settings(self):
+        # Use SettingClient to fetch initial settings
+        async def fetch_settings():
+            def update_ui(settings, error=None):
+                if error:
+                    self.status_label.config(text="Error fetching settings.")
+                else:
+                    # Update UI with current settings
+                    self.interaction_intensity_entry.insert(0, settings['interaction_intensity'])
+                    self.color_var.set(settings['color'])
+                    self.notification_entry.insert(0, settings['notification_frequency_min'])
+                    self.quotes_var.set(settings['quotes'])
+                    self.goals_var.set(settings['goals'])
+                    self.warning_time_entry.insert(0, settings['default_warning_time'])
+                    self.reset_hour_entry.insert(0, settings['reset_times']['hour'])
+                    self.reset_day_entry.insert(0, settings['reset_times']['day'])
+
+            await self.client.get_settings(update_ui)
+
+        asyncio.run(fetch_settings())
+
+    def submit_settings(self):
+        # Collect settings from the UI
+        new_settings = {
+            "interaction_intensity": int(self.interaction_intensity_entry.get()),
+            "color": self.color_var.get(),
+            "notification_frequency_min": int(self.notification_entry.get()),
+            "quotes": self.quotes_var.get(),
+            "goals": self.goals_var.get(),
+            "default_warning_time": int(self.warning_time_entry.get()),
+            "reset_times": {
+                "hour": int(self.reset_hour_entry.get()),
+                "day": int(self.reset_day_entry.get())
+            }
+        }
+
+        # Use SettingClient to update settings
+        async def update_settings():
+            def set_callback(status, error=None):
+                if status:
+                    self.status_label.config(text="Settings updated successfully.")
+                else:
+                    self.status_label.config(text=f"Failed to update settings: {error}")
+
+            await self.client.set_settings(new_settings, set_callback)
+
+        asyncio.run(update_settings())
+
 # Create the main window
-root = tk.Tk()
-root.title("Simple Tkinter GUI")
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = SettingsApp(root)
+    root.mainloop()
 
-#Top Width label
-menuWidthLabel = tk.Label(root, text="-----------------------------------------------------------------")
-menuWidthLabel.pack(pady=10)
 
-# Time label and entry box
-timeLabel = tk.Label(root, text="Enter time for rule (in minutes):")
-timeLabel.pack(pady=10)
-timeEntry = tk.Entry(root, width=30)
-timeEntry.pack(pady=5)
+if __name__ == "__main__":
+    from setting_management.SettingServer import SettingServer
+    from setting_management.SettingManager import SettingManager
+    # Create the SettingServer instance
+    setting_manager = SettingManager()
+    ws_server = SettingServer(setting_manager, host="localhost", port=8765)
 
-# TimeScale label and radio
-timeScaleLabel = tk.Label(root, text="Select how time is measured:")
-timeScaleLabel.pack(pady=10)
-timeScaleTypes = ["session", "day", "week"]
-def sel():
-   selection = "You selected " + str(timeScaleTypes[var.get()])
-   label.config(text = selection)
-var = tk.IntVar()
-R1 = tk.Radiobutton(root, text="count in the session ", variable=var, value=0, command=sel)
-R1.pack( anchor = tk.W )
-R2 = tk.Radiobutton(root, text="count for the day", variable=var, value=1, command=sel)
-R2.pack( anchor = tk.W )
-R3 = tk.Radiobutton(root, text="count for the week", variable=var, value=2, command=sel)
-R3.pack( anchor = tk.W)
-label = tk.Label(root)
-label.pack()
+    # Start the WebSocket server in a separate thread
+    ws_server.start()
+    print("Server started in a background thread.")
 
-# color label and dropdown
-colorLabel = tk.Label(root, text="Color")
-colorLabel.pack(pady=10)
-#currently textbox is the input, do we want only the dropdown? Data retrieval needed, see comment below
-colorEntry = tk.Entry(root, width=30)
-colorEntry.pack(pady=5)
-#dropdown?----------------------------
-# datatype of menu text 
-clicked = tk.StringVar()
-colorOptions = ["red", "gray", "white", "black"]
-colorDropdown = tk.OptionMenu(root , clicked , *colorOptions ) 
-colorDropdown.pack()
-#info here: https://www.geeksforgeeks.org/dropdown-menus-tkinter/
+    try:
+        # Main thread can do other things here (e.g., running a GUI)
+        while True:
+            root = tk.Tk()
+            app = SettingsApp(root)
+            root.mainloop()
+    except KeyboardInterrupt:
+        print("Stopping server...")
+        ws_server.stop()
+        print("Server stopped gracefully.")
 
-# Shutdown label and dropdown
-shutdownLabel = tk.Label(root, text="Shutdown the program? (True/False)")
-shutdownLabel.pack(pady=10)
-# Create an entry widget for user input
-shutdownEntry = tk.Entry(root, width=30)
-shutdownEntry.pack(pady=5)
-#Dropdown, change StringVar to boolean?
-clicked = tk.StringVar()
-boolOptions = [True, False]
-colorDropdown = tk.OptionMenu(root , clicked , *boolOptions ) 
-colorDropdown.pack()
 
-# message type label and textbox. Dropdown needed
-messageTypeLabel = tk.Label(root, text="Select your message type:")
-messageTypeLabel.pack(pady=10)
-messageTypeEntry = tk.Entry(root, width=30)
-messageTypeEntry.pack(pady=5)
 
-def submit_click():
-    summary_text = "after "+timeEntry.get()+" minutes in a "+timeScaleTypes[var.get()]+" I'll send you a "+colorEntry.get()+" "+messageTypeEntry.get()+" message and "+("shutdown" if shutdownEntry.get().lower()=="true" else "not shutdown")
-    summaryLabel.config(text=f"So, {summary_text}. Sound good?")  # Update the label with the input text
-    #session, day, week
 
-# summary label and submit button
-summaryLabel = tk.Label(root, text="Select Settings above")
-summaryLabel.pack(pady=10)
-submitButton = tk.Button(root, text="Submit Settings", command=submit_click)
-submitButton.pack(pady=10)
+DEFAULT_SETTINGS = {
+    "processSettings": {
 
-#confirm label and button
-confirmAndSendLabel = tk.Label(root, text="")
-confirmAndSendLabel.pack(pady=10)
-def confirm_click():
-    confirmAndSendLabel.config(text=f"I hope that went through")
-
-confirmAndSendButton = tk.Button(root, text="Confirm", command=confirm_click)
-confirmAndSendButton.pack(pady=10)
-
-# Run the application
-root.mainloop()
+    },
+    "interaction_intensity": 1,
+    "color": 'red',
+    "notification_frequency_min": 5,
+    "quotes": True,
+    "goals": False,
+    "default_warning_time": 5,
+    "reset_times": {
+        "hour": 3,
+        "day": 0
+    }
+}

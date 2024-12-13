@@ -67,10 +67,10 @@ class Tracker():
 
             if self.monitored_processes[exe]["updated"] == False:
                 self.monitored_processes[exe]["time"] += 1
-                print(f'!!!!!!!!!!!!!!!!!!!! {exe}')
+                # print(f'!!!!!!!!!!!!!!!!!!!! {exe}')
                 self.Tally_ds.update_tallies(exe)
                 self.monitored_processes[exe]["updated"] = True
-
+            # print(process)
         self.update_reset(self.monitored_processes)
 
     def check_limit_status(self, processes):
@@ -78,11 +78,15 @@ class Tracker():
         This function checks to see if the monitored processes time use exceeds certain limits.
         Here is where it is decided on how to handle the user :)
         """
+        # print('WQHATAEKL SKLE JSEKJ ')
         for process in processes:
+            # print('YOU NEED TO WORK')
             process_settings = self.setting_manager.get_process(process.name())
 
             # If the remaining limit is 0
+            # print("________________________________________________________Process Settings")
             if process_settings:
+                # print("________________________________________________________________________ALKJDF S")
                 if process_settings.daily_limit[0].time_limit <= self.monitored_processes[process.name()]['time']:
                     self.Notification.create_notification("You've been on too long!!")
                     ...
@@ -106,14 +110,14 @@ class Tracker():
             # Wait a minute
             time.sleep(self.single_tick)
             # Get list of active processes
-            processes = psutil.process_iter()
+            # print(len(processes))
             # Update the time of all monitored processes
-            self.update_monitored_processes(processes)
+            self.update_monitored_processes(psutil.process_iter())
             # Check if the user has exceeded their time limit
-            self.check_limit_status(processes)
+            self.check_limit_status(psutil.process_iter())
             # Checks to see if limits need a reset
             self.check_reset_times(self.setting_manager.get("reset_times"))
 
-            print(self.monitored_processes["chrome.exe"])
+            # print(self.monitored_processes["chrome.exe"])
             # Display handy notification
             self.Notification.get_quote_api('happiness')

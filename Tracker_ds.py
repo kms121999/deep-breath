@@ -42,7 +42,7 @@ class tally_ds():
                 self.add_to_SDW(exe, my_key)
         else:
             self.add_exe(exe, 0, 0, 0)
-        print(self.my_df[exe])
+        # print(self.my_df[exe])
 
     def get_exe_SDW(self, exe):
         '''
